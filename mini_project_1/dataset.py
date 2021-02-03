@@ -29,8 +29,7 @@ class Mall_Dataset:
         self.raw_X = self.dataset[self.all_vars]
         self.y = self.dataset['Purchased']
         self.X = self.raw_X.copy()
-        self.X.loc[:, ['Gender']] = (self.raw_X['Gender'].cat.codes.replace(-1, np.nan).interpolate().astype(int).astype('category').cat.rename_categories(self.raw_X['Gender'].cat.categories))
-        self.X.loc[:, ['Item']] = (self.raw_X['Item'].cat.codes.replace(-1, np.nan).interpolate().astype(int).astype('category').cat.rename_categories(self.raw_X['Item'].cat.categories))
+        self.X = self.X.apply(lambda x:x.fillna(x.value_counts().index[0]))
 
     def get_dataset(self, format = False):
         return self.X, self.y
