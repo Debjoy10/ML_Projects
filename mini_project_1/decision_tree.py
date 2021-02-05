@@ -1,12 +1,14 @@
 from dataset import Mall_Dataset
 import pandas as pd
 import numpy as np
+import pydot
 
 class DTnode:
     def __init__(self, predicted_class):
         self.predicted_class = predicted_class
         self.feat = None
         self.thr = None
+        self.info_val = 0
         self.children = {}
 
 class DecisionTreeClassifier:
@@ -17,6 +19,8 @@ class DecisionTreeClassifier:
         self.n_features = None
     
     def get_info_metric(self, class_pop, m):
+        # Function for Information Gain
+
         if self.info_metric == 'gini':
             # Gini Impurity
             info = 1 - np.sum([(n/m)**2 for n in class_pop])
@@ -27,19 +31,19 @@ class DecisionTreeClassifier:
             return info
 
     def best_split(self, X, y):
+        # Find the best feature for Decision tree node
+
+        # If less than 1 data-point present, return
         m = len(y)
         if m <= 1:
-            return None, None
+            return None, None, 0
         
         # Population in each class for information gain calculation
         num_parent = [np.sum(y==k) for k in range(self.num_classes)]
         best_info = self.get_info_metric(num_parent, m)
         best_feat, best_thr = None, None
 
-        # print("Best: {}".format(best_info))
-        # print("Size of current partition: {}".format(m))
         for idx in range(self.n_features):
-            # print("Finding Best Split for idx: {}".format(idx))
             if X.loc[:, X.columns[idx]].dtype == 'int64':
                 # Continuous Data
                 thresh, classes = zip(*sorted(zip(X.loc[:, X.columns[0]], y)))
@@ -57,13 +61,11 @@ class DecisionTreeClassifier:
                     if thresh[i] == thresh[i - 1]:
                         continue
 
-                    # print("Info Cont : {}".format(info_total))
                     if info_total < best_info:
                         best_info = info_total
                         best_feat = idx
                         best_thr = (thresh[i]+thresh[i-1])/2
-                        # print("Best thr: {}".format(best_thr))
-                        # print("Selected")
+
             else:
                 # Categorical Data
                 categories = list(X.loc[:, X.columns[idx]].dtype.categories)
@@ -75,29 +77,33 @@ class DecisionTreeClassifier:
                         num_subset = [np.sum(y_subset==k) for k in range(self.num_classes)] 
                         info_total += (len(X_subset)*self.get_info_metric(num_subset, len(X_subset))/m)
                 
-                # print("Info Cat : {}".format(info_total))
                 if info_total < best_info:
                     best_info = info_total
                     best_feat = idx
                     best_thr = None
-                    # print("Selected")
             
-        return best_feat, best_thr
+        return best_feat, best_thr, best_info
 
     def grow_tree(self, X, y, depth = 0):
+        # Main function for running Decision tree algorithm and generating the tree structure
+
         num_samples = [np.sum(y==k) for k in range(self.num_classes)]
         predicted_class = np.argmax(num_samples)
         node = DTnode(predicted_class)
 
         if depth <= self.max_depth:
-            idx, thr = self.best_split(X, y)
-            print("Current Depth: {}".format(depth))
-            print("Idx: {}".format(idx))
-            print("Thr: {}".format(thr))
-            print("Predicted Class: {}".format(predicted_class))
+            idx, thr, info = self.best_split(X, y)
             node.feat = idx
             node.thr = thr
+            node.info_val = info
 
+            # Debugger
+            # print("Current Depth: {}".format(depth))
+            # print("Idx: {}".format(idx))
+            # print("Thr: {}".format(thr))
+            # print("Predicted Class: {}".format(predicted_class))
+            # print("Info: {}".format(info))
+            
             if idx == None: return node
             if thr != None:
                 left_idxs = X.iloc[:, idx] < thr
@@ -118,7 +124,83 @@ class DecisionTreeClassifier:
         return node
     
     def fit(self, X, y):
+        # Train Decision tree classifier on the X, y data passed as arguments
+
         self.num_classes = len(np.unique(y))
         self.n_features = len(X.columns)
+        self.attr_list = X.columns
         self.tree = self.grow_tree(X, y)
         return self.tree
+
+    def get_accuracy(self, y_true, y_pred):
+        # Utility Function to calculate the accuracy from predicted and ground truth labels
+
+        from sklearn.metrics import accuracy_score
+        return accuracy_score(y_true, y_pred)
+
+    def predict(self, X, y = None):
+        # Inference using trained Decision Tree on the X, y data passed as arguments
+
+        preds = []
+        for i in range(len(X)):
+            node = self.tree
+            while node.children != {}:
+                if node.thr != None:
+                    if X.iloc[i][node.feat] > node.thr:
+                        node = node.children["right"]
+                    else:
+                        node = node.children["left"]
+                else:
+                    node = node.children[X.iloc[i][node.feat]]
+
+            preds.append(node.predicted_class)
+        
+        y_pred = np.array(preds)
+        y_true = np.array(y)
+        
+        # Train or Dev
+        acc = self.get_accuracy(y_true, y_pred)
+        return acc, y_pred       
+
+    def gen_dot(self, parent, ptext, graph):
+        # Recursive function for generating the dot command for adding Parent-Children Edge to the graph viz.
+
+        if parent.children == {}:
+            return graph
+
+        if parent.thr != None:
+            rnode = parent.children["right"]
+            lnode = parent.children["left"]
+            
+            if rnode.info_val == None: rnode.info_val = 'NA'
+            ctext = self.attr_list[parent.feat] + " > " + str(parent.thr) + "\n" + "Info = " + str(rnode.info_val) + "\nPredicted Class = "  + str(rnode.predicted_class)
+            edge = pydot.Edge(ptext, ctext)
+            graph.add_edge(edge)
+            graph = self.gen_dot(rnode, ctext, graph)
+
+            if lnode.info_val == None: lnode.info_val = 'NA'
+            ctext = ctext = self.attr_list[parent.feat] + " < " + str(parent.thr) + "\n" + "Info = " + str(lnode.info_val) + "\nPredicted Class = "  + str(lnode.predicted_class)
+            edge = pydot.Edge(ptext, ctext)
+            graph.add_edge(edge)
+            graph = self.gen_dot(lnode, ctext, graph)
+
+        else:
+            for cat in parent.children:
+                cnode = parent.children[cat]
+                
+                if cnode.info_val == None: cnode.info_val = 'NA'
+                ctext = self.attr_list[parent.feat] + " = " + str(cat) + "\n" + "Info = " + str(cnode.info_val) + "\nPredicted Class = "  + str(cnode.predicted_class)
+                edge = pydot.Edge(ptext, ctext)
+                graph.add_edge(edge)
+                graph = self.gen_dot(cnode, ctext, graph)
+        
+        return graph
+
+    def visualize(self, PATH = 'Decision_Tree_Visualization.png'):
+        # Main Visualization function for that calls the Dot command generation function with the ROOT node.
+
+        graph = pydot.Dot(graph_type='graph')
+        node = self.tree
+        node_text =  "ROOT" + "\n" + "Info = " + str(node.info_val) + "\nPredicted Class = "  + str(node.predicted_class)
+        graph = self.gen_dot(node, node_text, graph)
+        graph.write_png(PATH)

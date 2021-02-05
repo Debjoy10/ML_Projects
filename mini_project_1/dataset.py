@@ -1,6 +1,7 @@
 import pandas as pd
 import numpy as np
 
+# Dataset Class for Mall Dataset
 class Mall_Dataset:
     def __init__(self, split = 'train'):
         self.split = split
