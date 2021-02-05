@@ -157,7 +157,7 @@ class DecisionTreeClassifier:
         
         y_pred = np.array(preds)
         y_true = np.array(y)
-        
+
         # Train or Dev
         acc = self.get_accuracy(y_true, y_pred)
         return acc, y_pred       
@@ -203,4 +203,6 @@ class DecisionTreeClassifier:
         node = self.tree
         node_text =  "ROOT" + "\n" + "Info = " + str(node.info_val) + "\nPredicted Class = "  + str(node.predicted_class)
         graph = self.gen_dot(node, node_text, graph)
+
+        print("Decision Tree diagram written to {}".format(PATH))
         graph.write_png(PATH)
