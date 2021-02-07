@@ -32,5 +32,16 @@ class Mall_Dataset:
         self.X = self.raw_X.copy()
         self.X = self.X.apply(lambda x:x.fillna(x.value_counts().index[0]))
 
-    def get_dataset(self, format = False):
+    def get_dataset(self, sklearn_compatible = False):
+        if sklearn_compatible:
+            # Convert to One-Hot-Encoded features for SKLearn
+
+            X_new = self.X.copy()
+            from sklearn.compose import ColumnTransformer 
+            from sklearn.preprocessing import OneHotEncoder
+            cat_idxs = [idx for idx in range(len(self.X.columns)) if self.X.iloc[:, idx].dtype != 'int64']
+            columnTransformer = ColumnTransformer([('encoder', OneHotEncoder(), cat_idxs)], remainder='passthrough')
+            X_new = pd.DataFrame(columnTransformer.fit_transform(X_new), dtype = np.str)  
+            return X_new, self.y
+
         return self.X, self.y

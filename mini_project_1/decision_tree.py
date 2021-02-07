@@ -44,7 +44,7 @@ class DecisionTreeClassifier:
         best_feat, best_thr = None, None
 
         for idx in range(self.n_features):
-            if X.loc[:, X.columns[idx]].dtype == 'int64':
+            if X.loc[:, X.columns[idx]].dtype in ['int64', 'object']:
                 # Continuous Data
                 thresh, classes = zip(*sorted(zip(X.loc[:, X.columns[0]], y)))
                 num_left = np.zeros(self.num_classes)
