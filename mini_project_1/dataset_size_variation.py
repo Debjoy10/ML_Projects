@@ -18,7 +18,7 @@ X_dev, y_dev = dev_dataset.get_dataset()
 
 # Plotting Utility function
 def plot_acc_size_var(sizes, train_acc, dev_acc, fname):
-	x = [10*i for i in list(sizes)]
+	x = [100*i for i in list(sizes)]
 	plt.xlabel("Percentage of training data")
 	plt.ylabel("Accuracy")
 	plt.title("Training performance with dataset size")
