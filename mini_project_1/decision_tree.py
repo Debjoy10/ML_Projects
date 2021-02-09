@@ -44,9 +44,9 @@ class DecisionTreeClassifier:
         best_feat, best_thr = None, None
 
         for idx in range(self.n_features):
-            if X.loc[:, X.columns[idx]].dtype in ['int64', 'object']:
+            if X.loc[:, X.columns[idx]].dtype in ['int64']:
                 # Continuous Data
-                thresh, classes = zip(*sorted(zip(X.loc[:, X.columns[0]], y)))
+                thresh, classes = zip(*sorted(zip(X.loc[:, X.columns[idx]], y)))
                 num_left = np.zeros(self.num_classes)
                 num_right = num_parent.copy()
 
@@ -196,7 +196,7 @@ class DecisionTreeClassifier:
         
         return graph
 
-    def visualize(self, PATH = 'Decision_Tree_Visualization.png'):
+    def visualize(self, PATH = 'plots/Decision_Tree_Visualization.png'):
         # Main Visualization function for that calls the Dot command generation function with the ROOT node.
 
         graph = pydot.Dot(graph_type='graph')

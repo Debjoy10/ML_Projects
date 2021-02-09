@@ -18,6 +18,7 @@ class Mall_Dataset:
             dataset = df
 
         self.dataset = dataset.copy()
+        self.dataset = self.dataset.apply(lambda x:x.fillna(method='ffill'))
         self.all_vars = [x for x in list(self.dataset.columns) if x != 'Purchased']
         self.continuous_vars = ['Age', 'EstimatedSalary', 'Spending Score (1-100)']
         self.discrete_vars = [x for x in self.all_vars if x not in self.continuous_vars]
@@ -35,7 +36,6 @@ class Mall_Dataset:
     def get_dataset(self, sklearn_compatible = False):
         if sklearn_compatible:
             # Convert to One-Hot-Encoded features for SKLearn
-
             X_new = self.X.copy()
             from sklearn.compose import ColumnTransformer 
             from sklearn.preprocessing import OneHotEncoder

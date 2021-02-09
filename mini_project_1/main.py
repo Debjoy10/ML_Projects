@@ -27,6 +27,7 @@ print("Dev Accuracy: {}".format(dev_acc))
 
 # Visualise tree
 DT_Classifier.visualize()
+print("-"*30)
 
 # Checking using SkLearn Decision Tree implementation
 from matplotlib import pyplot as plt
@@ -39,7 +40,7 @@ X_train, y_train = train_dataset.get_dataset(sklearn_compatible = True)
 X_dev, y_dev = dev_dataset.get_dataset(sklearn_compatible = True)
 
 # Train Classifier
-clf = DecisionTreeClassifier(random_state=0, max_depth = 4)
+clf = DecisionTreeClassifier(max_depth = 4)
 clf.fit(X_train, y_train)
 
 # Get Predictions
@@ -52,4 +53,6 @@ print("Dev Accuracy: {}".format(accuracy_score(y_dev, y_dev_preds)))
 # Visualize Tree
 fig, axes = plt.subplots(nrows = 1,ncols = 1,figsize = (4,4), dpi=300)
 tree.plot_tree(clf, feature_names = X_train.columns, filled = True)
-fig.savefig('Decision_Tree_Sklearn.png')
+PATH = 'plots/Decision_Tree_Sklearn.png'
+fig.savefig(PATH)
+print("SKLearn Decision Tree diagram written to {}".format(PATH))
