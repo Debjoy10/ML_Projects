@@ -27,7 +27,7 @@ class DecisionTreeClassifier:
             return info
         else:
             # Entropy
-            info = -1 * np.sum([(n/m)*np.log(n/m) for n in class_pop])
+            info = -1 * np.sum([(n/m)*np.log(n/m) for n in class_pop if n > 0])
             return info
 
     def best_split(self, X, y):
@@ -159,7 +159,9 @@ class DecisionTreeClassifier:
         y_true = np.array(y)
 
         # Train or Dev
-        acc = self.get_accuracy(y_true, y_pred)
+        #acc = self.get_accuracy(y_true, y_pred)
+        # Test Set
+        acc = 0
         return acc, y_pred       
 
     def gen_dot(self, parent, ptext, graph):
