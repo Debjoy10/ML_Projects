@@ -100,56 +100,56 @@ X_test_sck, y_test_sck = test_dataset.get_dataset(sklearn_compatible = True)
 
 # For Generating the data to compare with Scikit Model at different depths
 
-# for i in depth:
-#	# Training and Inference for own model
-# 	DT_Classifier_gini = DTC1(max_depth = i, info_metric = 'gini')
-# 	DT_Classifier_gini.fit(X_train, y_train)
+for i in depth:
+	# Training and Inference for own model
+	DT_Classifier_gini = DTC1(max_depth = i, info_metric = 'gini')
+	DT_Classifier_gini.fit(X_train, y_train)
 
-#	# Get Predictions
-# 	train_acc_gini, y_pred_train_gini = DT_Classifier_gini.predict("train", X_train, y_train)
-# 	dev_acc_gini, y_pred_dev_gini = DT_Classifier_gini.predict("dev", X_dev, y_dev)
+	# Get Predictions
+	train_acc_gini, y_pred_train_gini = DT_Classifier_gini.predict("train", X_train, y_train)
+	dev_acc_gini, y_pred_dev_gini = DT_Classifier_gini.predict("dev", X_dev, y_dev)
 
-#	# Store the data for visualization later
-# 	train_accs_gini_list.append(train_acc_gini);
-# 	dev_accs_gini_list.append(dev_acc_gini);
+	# Store the data for visualization later
+	train_accs_gini_list.append(train_acc_gini);
+	dev_accs_gini_list.append(dev_acc_gini);
 
-#	# Training and Inference for Scikit Model
-# 	clf = DecisionTreeClassifier(max_depth = i)
-# 	clf.fit(X_train_sck, y_train_sck)
+	# Training and Inference for Scikit Model
+	clf = DecisionTreeClassifier(max_depth = i)
+	clf.fit(X_train_sck, y_train_sck)
 
-# 	# Get Predictions
-# 	y_train_preds = clf.predict(X_train_sck)
-# 	y_dev_preds = clf.predict(X_dev_sck)
+	# Get Predictions
+	y_train_preds = clf.predict(X_train_sck)
+	y_dev_preds = clf.predict(X_dev_sck)
 
-#	# Store the data for Visualization later
-# 	train_accs_scikit.append(accuracy_score(y_train_sck,y_train_preds))
-# 	dev_accs_scikit.append(accuracy_score(y_dev_sck, y_dev_preds))
+	# Store the data for Visualization later
+	train_accs_scikit.append(accuracy_score(y_train_sck,y_train_preds))
+	dev_accs_scikit.append(accuracy_score(y_dev_sck, y_dev_preds))
 
-# # Plot the accuracy scores
-# plot_acc_size_var(sizes = depth, acc_1 = train_accs_gini_list, acc_2 = train_accs_scikit, fname = 'plots/Scikit_comp_TrainVariation.png')
-# plot_acc_size_var(sizes = depth, acc_1 = dev_accs_gini_list, acc_2 = dev_accs_scikit, fname = 'plots/Scikit_comp_DevVariation.png')
+# Plot the accuracy scores
+plot_acc_size_var(sizes = depth, acc_1 = train_accs_gini_list, acc_2 = train_accs_scikit, fname = 'plots/Scikit_comp_TrainVariation.png')
+plot_acc_size_var(sizes = depth, acc_1 = dev_accs_gini_list, acc_2 = dev_accs_scikit, fname = 'plots/Scikit_comp_DevVariation.png')
 
 
-# Predict on Test Data
+# # Predict on Test Data
 
-# Training
-DT_Classifier = DTC1(max_depth = 4, info_metric = 'gini')
-DT_Classifier.fit(X_train, y_train)
+# # Training
+# DT_Classifier = DTC1(max_depth = 4, info_metric = 'gini')
+# DT_Classifier.fit(X_train, y_train)
 
-clf = DecisionTreeClassifier(max_depth = 7)
-clf.fit(X_train_sck, y_train_sck)
+# clf = DecisionTreeClassifier(max_depth = 7)
+# clf.fit(X_train_sck, y_train_sck)
 
-# Inference
-y_test_preds_scikit = clf.predict(X_test_sck)
-acc, y_test_preds_own = DT_Classifier.predict("test", X_test)
+# # Inference
+# y_test_preds_scikit = clf.predict(X_test_sck)
+# acc, y_test_preds_own = DT_Classifier.predict("test", X_test)
 
-# Print the Results
-print("Predictions on Test Data generated using Own Model: {}".format(y_test_preds_own))
-print("Predictions on Test Data generated using Scikit Model: {}".format(y_test_preds_scikit))
+# # Print the Results
+# print("Predictions on Test Data generated using Own Model: {}".format(y_test_preds_own))
+# print("Predictions on Test Data generated using Scikit Model: {}".format(y_test_preds_scikit))
 
-# Store the Results
-np.savetxt("preds/own_depth_4.csv", y_test_preds_own, delimiter=",")
-np.savetxt("preds/scikit_depth_7.csv", y_test_preds_scikit, delimiter=",")
+# # Store the Results
+# np.savetxt("preds/own_depth_4.csv", y_test_preds_own, delimiter=",")
+# np.savetxt("preds/scikit_depth_7.csv", y_test_preds_scikit, delimiter=",")
 
 # Model Statistics for a single tree
 
