@@ -138,7 +138,7 @@ class DecisionTreeClassifier:
         from sklearn.metrics import accuracy_score
         return accuracy_score(y_true, y_pred)
 
-    def predict(self, X, y = None):
+    def predict(self, mode, X, y = None):
         # Inference using trained Decision Tree on the X, y data passed as arguments
 
         preds = []
@@ -159,9 +159,15 @@ class DecisionTreeClassifier:
         y_true = np.array(y)
 
         # Train or Dev
-        #acc = self.get_accuracy(y_true, y_pred)
+        # If you are doing inference on Training/Validation Set, Please comment out the below line
+        # acc = self.get_accuracy(y_true, y_pred)
+        if mode == "train" or mode == "dev":
+            acc = self.get_accuracy(y_true, y_pred)
+        # If you are doing inference on Test Set, Please uncomment the following lines
         # Test Set
-        acc = 0
+        else:
+            acc = 0;
+
         return acc, y_pred       
 
     def gen_dot(self, parent, ptext, graph):
