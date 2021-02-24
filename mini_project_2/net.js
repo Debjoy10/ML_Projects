@@ -1,5 +1,4 @@
 function weightInitializer(input_neurons, output_neurons){
-    a
     /*
     
         Returns the weight matrix (2D list) of shape output_neurons x input_neurons
@@ -21,6 +20,8 @@ function biasInitializer(neurons){
         Initialized as all zeros
     */
     // Write your code here
+    var bias = new Array(neurons).fill(0);
+    return bias;
 }
 
 function relu(x){
@@ -97,7 +98,9 @@ class Layer{
         */
 
         // Write your code here
-
+        var a = matrixmultiplication(this.weight, X);
+        var y = matrixaddition(y, this.bias);
+        return y;
     }
     set(layer){
         for(let i=0; i<this.weight.length; i++){
