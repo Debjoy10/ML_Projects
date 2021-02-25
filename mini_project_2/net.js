@@ -48,6 +48,10 @@ function relu(x){
             return a list whose i-th element is relu's output of the i-th element of x
         */
         // Write your code here
+        var y = new Array(x.length);
+        for (var i = 0; i < x.length; i++) {
+        	y[i] = (x[i]>=0)?x[i]:0;
+        }
     }
     else{
 
@@ -56,7 +60,9 @@ function relu(x){
             return relu's output of x
         */
         // Write your code here
+        y = (x>=0)?x:0;
     }
+    return y;
 }
 
 function binarize(x){
@@ -77,8 +83,9 @@ function binarize(x){
             return a list whose i-th element is the binarize output of the i-th element of x
         */
         // Write your code here
+        var y = new Array(x.length);
         for (var i = 0; i < x.length; i++) {
-        	x[i] = (x[i]>=0)?1:0;
+        	y[i] = (x[i]>=0)?1:0;
         }
     }
     else{
@@ -87,9 +94,9 @@ function binarize(x){
             return binarize's output of number x
         */
         // Write your code here
-        x = (x>=0)?1:0;
+        y = (x>=0)?1:0;
     }
-    return x;
+    return y;
 }
 
 class Layer{
@@ -141,6 +148,7 @@ class Layer{
                 */
 
                 // Write your code here
+                this.weight[i][j]=this.weight[i][j]+randomGaussian(0,mutationParameter);
 
             }
         }
@@ -155,6 +163,7 @@ class Layer{
             */
 
             // Write your code here
+            this.bias[i]=this.bias[i]+randomGaussian(0,mutationParameter);
 
         }
     }
