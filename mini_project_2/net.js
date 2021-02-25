@@ -77,6 +77,9 @@ function binarize(x){
             return a list whose i-th element is the binarize output of the i-th element of x
         */
         // Write your code here
+        for (var i = 0; i < x.length; i++) {
+        	x[i] = (x[i]>=0)?1:0;
+        }
     }
     else{
         /*
@@ -84,7 +87,9 @@ function binarize(x){
             return binarize's output of number x
         */
         // Write your code here
+        x = (x>=0)?1:0;
     }
+    return x;
 }
 
 class Layer{
