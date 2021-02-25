@@ -192,6 +192,15 @@ class Network{
             is already implemented in this file
         */
          // Write your code here
+         var x1 = this.layer1.forward(X);
+         var y1 = relu(x1);
+         var x2 = this.layer2.forward(y1);
+         var y2 = relu(x2);
+         var x3 = this.layer3.forward(y2);
+         var y3 = relu(x3);
+         var x4 = this.layer4.forward(y3);
+         var y = binarize(x4);
+         return y;
     }
     set(network){
         this.layer1.set(network.layer1);
