@@ -11,6 +11,15 @@ function weightInitializer(input_neurons, output_neurons){
     */
 
     // Write your code here
+    var i, j;
+    var mat = new Array(output_neurons);
+    for (i = 0; i < output_neurons; i++) {
+    	mat[i] = new Array(input_neurons);
+    	for (j = 0; j < input_neurons; j++) {
+    		mat[i][j] = randomGaussian(0, Math.sqrt(2/input_neurons));
+    	}
+    }
+    return mat;
 }
 
 function biasInitializer(neurons){
