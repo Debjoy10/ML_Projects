@@ -14,6 +14,7 @@ class Evolution{
         this.fitness = [];
         this.maxfitvals = [];
         this.generation = 0;
+        this.mostfit=0;
     }
     startLife(){
         for(let i=0; i<population; i++){
@@ -60,6 +61,35 @@ class Evolution{
         */
 
          // Write your code here
+        var total_fitness = 0;
+        for (var i=0;i<this.fitness.length;i++)
+        {
+            total_fitness=total_fitness+this.fitness[i];
+        }
+        var prob = new Array(this.fitness.length);
+        for (var i=0;i<this.fitness.length;i++)
+        {
+            prob[i]=exp(this.fitness[i]/total_fitness);
+        }
+        var normalising_factor = 0;
+        for (var i=0;i<prob.length;i++)
+        {
+            normalising_factor=normalising_factor+this.fitness[i];
+        }
+        for (var i=0;i<prob.length;i++)
+        {
+            prob[i]=prob[i]/normalising_factor;
+        }
+        var mostfit = this.fitness[0];
+        for (var i=0;i<this.fitness.length;i++)
+        {
+            if (mostfit<this.fitness[i])
+            {
+                mostfit=this.fitness[i];
+            }
+        }
+        this.mostfit=mostfit;
+        
 
     }
     mutateGeneration(){
