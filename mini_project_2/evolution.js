@@ -74,7 +74,7 @@ class Evolution{
         var normalising_factor = 0;
         for (var i=0;i<prob.length;i++)
         {
-            normalising_factor=normalising_factor+this.fitness[i];
+            normalising_factor=normalising_factor+prob[i];
         }
         for (var i=0;i<prob.length;i++)
         {
@@ -90,9 +90,36 @@ class Evolution{
         }
         this.mostfit=mostfit;
         
-         var max_fit = Math.max(this.fitness);
-         this.maxfitvals.push(max_fit);
+        var max_fit = Math.max(this.fitness);
+        this.maxfitvals.push(max_fit);
 
+        var cumulative_prob = new Array(this.fitness.length);
+        var sum = 0;
+        for (var i = 0; i < this.fitness.length; i++) {
+            sum = sum + prob[i]
+            cumulative_prob[i] = sum;
+        }
+
+        var newpop = new Array(this.fitness.length);
+        newpop[0] = clone(this.pop[this.mostfit]);
+        for(var i = 1; i < this.fitness.length; i++)
+        {
+            var mfit = random();
+            if(mfit > chooseFittest) {
+                newpop[i] = clone(this.pop[this.mostfit]);
+            }
+            else {
+                var th = random();
+                var index = 0;
+                for (var k = 0; k < this.fitness.length; k++) {
+                    if(cumulative_prob[k] > th) {
+                        index = k;
+                    }  
+                }
+            }
+            newpop[i] = clone(this.pop[index]);
+        }
+        this.pop = newpop;
     }
     mutateGeneration(){
         for(let i=1; i<population; i++){
