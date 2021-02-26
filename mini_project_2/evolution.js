@@ -115,12 +115,14 @@ class Evolution{
                 for (var k = 0; k < this.fitness.length; k++) {
                     if(cumulative_prob[k] > th) {
                         index = k;
+                        break;
                     }  
                 }
                 newpop[i] = clone(this.pop[index]);
             }  
         }
         this.pop = newpop;
+        this.generation=this.generation+1;
     }
     mutateGeneration(){
         for(let i=1; i<population; i++){
@@ -135,6 +137,7 @@ class Evolution{
                 this.fitness[i] = this.pop[i].fitness;
             }
         }
+        //this.generation=this.generation+1;
         return changed;
     }
 }
