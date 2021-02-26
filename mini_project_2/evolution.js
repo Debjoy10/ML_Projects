@@ -80,16 +80,18 @@ class Evolution{
         {
             prob[i]=prob[i]/normalising_factor;
         }
-        var mostfit = this.fitness[0];
+        var mostfit = 0;
         for (var i=0;i<this.fitness.length;i++)
         {
-            if (mostfit<this.fitness[i])
+            if (this.fitness[mostfit]<this.fitness[i])
             {
-                mostfit=this.fitness[i];
+                mostfit=i;
             }
         }
         this.mostfit=mostfit;
         
+         var max_fit = Math.max(this.fitness);
+         this.maxfitvals.push(max_fit);
 
     }
     mutateGeneration(){
