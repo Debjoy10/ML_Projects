@@ -60,6 +60,8 @@ class Evolution{
         */
 
          // Write your code here
+         var max_fit = Math.max(this.fitness);
+         this.maxfitvals.push(max_fit);
 
     }
     mutateGeneration(){
