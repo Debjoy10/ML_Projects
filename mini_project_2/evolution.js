@@ -81,22 +81,23 @@ class Evolution{
             prob[i]=prob[i]/normalising_factor;
         }
         var mostfit = 0;
+        var max_fit = this.fitness[0];
         for (var i=0;i<this.fitness.length;i++)
         {
             if (this.fitness[mostfit]<this.fitness[i])
             {
                 mostfit=i;
+                max_fit = this.fitness[i];
             }
         }
         this.mostfit=mostfit;
-        
-        var max_fit = Math.max(this.fitness);
+        // var max_fit = Math.max(this.fitness);
         this.maxfitvals.push(max_fit);
 
         var cumulative_prob = new Array(this.fitness.length);
         var sum = 0;
         for (var i = 0; i < this.fitness.length; i++) {
-            sum = sum + prob[i]
+            sum = sum + prob[i];
             cumulative_prob[i] = sum;
         }
 
@@ -116,8 +117,8 @@ class Evolution{
                         index = k;
                     }  
                 }
-            }
-            newpop[i] = clone(this.pop[index]);
+                newpop[i] = clone(this.pop[index]);
+            }  
         }
         this.pop = newpop;
     }

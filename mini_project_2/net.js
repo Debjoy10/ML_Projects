@@ -122,7 +122,7 @@ class Layer{
 
         // Write your code here
         var a = matrixmultiplication(this.weight, X);
-        var y = matrixaddition(y, this.bias);
+        var y = matrixaddition(a, this.bias);
         return y;
     }
     set(layer){
