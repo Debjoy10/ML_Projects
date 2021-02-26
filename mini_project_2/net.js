@@ -52,6 +52,7 @@ function relu(x){
         for (var i = 0; i < x.length; i++) {
         	y[i] = (x[i]>=0)?x[i]:0;
         }
+        return y;
     }
     else{
 
@@ -60,9 +61,9 @@ function relu(x){
             return relu's output of x
         */
         // Write your code here
-        y = (x>=0)?x:0;
+        var y = (x>=0)?x:0;
+        return y;
     }
-    return y;
 }
 
 function binarize(x){
@@ -87,6 +88,7 @@ function binarize(x){
         for (var i = 0; i < x.length; i++) {
         	y[i] = (x[i]>=0)?1:0;
         }
+        return y;
     }
     else{
         /*
@@ -94,9 +96,9 @@ function binarize(x){
             return binarize's output of number x
         */
         // Write your code here
-        y = (x>=0)?1:0;
+        var y = (x>=0)?1:0;
+        return y;
     }
-    return y;
 }
 
 class Layer{
