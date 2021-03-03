@@ -62,24 +62,34 @@ class Evolution{
 
          // Write your code here
         var total_fitness = 0;
+
+        // Total fitness value for calculation of selection probability 
         for (var i=0;i<this.fitness.length;i++)
         {
             total_fitness=total_fitness+this.fitness[i];
         }
+
+        // Exponentiation of the selection probabilities
         var prob = new Array(this.fitness.length);
         for (var i=0;i<this.fitness.length;i++)
         {
             prob[i]=exp(this.fitness[i]/total_fitness);
         }
+
+        // Calculating the normalising factor
         var normalising_factor = 0;
         for (var i=0;i<prob.length;i++)
         {
             normalising_factor=normalising_factor+prob[i];
         }
+
+        // Calculation of selection probabilities
         for (var i=0;i<prob.length;i++)
         {
             prob[i]=prob[i]/normalising_factor;
         }
+
+        // Calculation of car-index for maximum fitness and maximum fitness value
         var mostfit = 0;
         var max_fit = this.fitness[0];
         for (var i=0;i<this.fitness.length;i++)
@@ -90,10 +100,12 @@ class Evolution{
                 max_fit = this.fitness[i];
             }
         }
+
+        // Assigning the appropriate variable
         this.mostfit=mostfit;
-        // var max_fit = Math.max(this.fitness);
         this.maxfitvals.push(max_fit);
 
+        // Calculating the CDF
         var cumulative_prob = new Array(this.fitness.length);
         var sum = 0;
         for (var i = 0; i < this.fitness.length; i++) {
@@ -101,14 +113,18 @@ class Evolution{
             cumulative_prob[i] = sum;
         }
 
+        // Sampling the car indices to pass on to the next generation using CDF
         var newpop = new Array(this.fitness.length);
         newpop[0] = clone(this.pop[this.mostfit]);
         for(var i = 1; i < this.fitness.length; i++)
         {
+            // Select random number between 0 to 1
             var mfit = random();
-            if(mfit > chooseFittest) {
+            // Choosing the fittest car with a probability of chooseFittest
+            if(mfit < chooseFittest) {
                 newpop[i] = clone(this.pop[this.mostfit]);
             }
+            // Choosing a random car index based on CDF
             else {
                 var th = random();
                 var index = 0;
@@ -121,6 +137,7 @@ class Evolution{
                 newpop[i] = clone(this.pop[index]);
             }  
         }
+        // Updating the current generation with the next generation
         this.pop = newpop;
         this.generation=this.generation+1;
     }
@@ -137,7 +154,6 @@ class Evolution{
                 this.fitness[i] = this.pop[i].fitness;
             }
         }
-        //this.generation=this.generation+1;
         return changed;
     }
 }

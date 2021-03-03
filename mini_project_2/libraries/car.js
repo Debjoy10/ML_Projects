@@ -348,7 +348,6 @@ function draw() {
         textSize(16);
         fill(0);
         stroke(0);
-        //evolution.generation=evolution.generation+1;
         text("Generation: "+evolution.generation, 10, 30);
         text("Max fitness: "+evolution.maxfitvals[evolution.maxfitvals.length-1], 10, 60);
     }

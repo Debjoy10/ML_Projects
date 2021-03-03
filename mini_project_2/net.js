@@ -12,11 +12,11 @@ function weightInitializer(input_neurons, output_neurons){
 
     // Write your code here
     var i, j;
-    var mat = new Array(output_neurons);
+    var mat = new Array(output_neurons); // Row initialisation
     for (i = 0; i < output_neurons; i++) {
-    	mat[i] = new Array(input_neurons);
+    	mat[i] = new Array(input_neurons);  // Column initialisation
     	for (j = 0; j < input_neurons; j++) {
-    		mat[i][j] = randomGaussian(0, sqrt(2/input_neurons));
+    		mat[i][j] = randomGaussian(0, sqrt(2/input_neurons)); // Gaussian Distribution with mean 0 and standard deviation sqrt(2/input_neurons)
     	}
     }
     return mat;
@@ -29,7 +29,7 @@ function biasInitializer(neurons){
         Initialized as all zeros
     */
     // Write your code here
-    var bias = new Array(neurons).fill(0);
+    var bias = new Array(neurons).fill(0); // Array of length neurons containing all zeros
     return bias;
 }
 
@@ -48,9 +48,9 @@ function relu(x){
             return a list whose i-th element is relu's output of the i-th element of x
         */
         // Write your code here
-        var y = new Array(x.length);
+        var y = new Array(x.length); // y stores the output array from ReLU activation function
         for (var i = 0; i < x.length; i++) {
-        	y[i] = (x[i]>=0)?x[i]:0;
+        	y[i] = (x[i]>=0)?x[i]:0; // ReLU applied on each element of the array
         }
         return y;
     }
@@ -61,7 +61,7 @@ function relu(x){
             return relu's output of x
         */
         // Write your code here
-        var y = (x>=0)?x:0;
+        var y = (x>=0)?x:0; // ReLU applied on a single vaiable
         return y;
     }
 }
@@ -84,9 +84,9 @@ function binarize(x){
             return a list whose i-th element is the binarize output of the i-th element of x
         */
         // Write your code here
-        var y = new Array(x.length);
+        var y = new Array(x.length); // y stores the output array from Binarize function
         for (var i = 0; i < x.length; i++) {
-        	y[i] = (x[i]>=0)?1:0;
+        	y[i] = (x[i]>=0)?1:0; // Binarize applied on each element of the array
         }
         return y;
     }
@@ -96,7 +96,7 @@ function binarize(x){
             return binarize's output of number x
         */
         // Write your code here
-        var y = (x>=0)?1:0;
+        var y = (x>=0)?1:0; // Binarize applied on a single vaiable
         return y;
     }
 }
@@ -121,8 +121,8 @@ class Layer{
         */
 
         // Write your code here
-        var a = matrixmultiplication(this.weight, X);
-        var y = matrixaddition(a, this.bias);
+        var a = matrixmultiplication(this.weight, X); // A = W'X (Here weights already have dimensions [output neurons X input neurons], so no need of transpose operation)
+        var y = matrixaddition(a, this.bias); // y = A + b
         return y;
     }
     set(layer){
@@ -150,7 +150,7 @@ class Layer{
                 */
 
                 // Write your code here
-                this.weight[i][j]=this.weight[i][j]+randomGaussian(0,mutationParameter);
+                this.weight[i][j]=this.weight[i][j]+randomGaussian(0,mutationParameter); // Mutation of weights parameter after sampling from Gaussian 
 
             }
         }
@@ -165,7 +165,7 @@ class Layer{
             */
 
             // Write your code here
-            this.bias[i]=this.bias[i]+randomGaussian(0,mutationParameter);
+            this.bias[i]=this.bias[i]+randomGaussian(0,mutationParameter); // Mutation of bias parameter after sampling from Gaussian
 
         }
     }
@@ -203,14 +203,14 @@ class Network{
             is already implemented in this file
         */
          // Write your code here
-         var x1 = this.layer1.forward(X);
-         var y1 = relu(x1);
-         var x2 = this.layer2.forward(y1);
-         var y2 = relu(x2);
-         var x3 = this.layer3.forward(y2);
-         var y3 = relu(x3);
-         var x4 = this.layer4.forward(y3);
-         var y = binarize(x4);
+         var x1 = this.layer1.forward(X);  // Feed-forward layer-1
+         var y1 = relu(x1);                // ReLU activation on output of layer-1
+         var x2 = this.layer2.forward(y1); // Feed-forward layer-2
+         var y2 = relu(x2);                // ReLU activation on output of layer-2
+         var x3 = this.layer3.forward(y2); // Feed-forward layer-3
+         var y3 = relu(x3);                // ReLU activation on output of layer-3
+         var x4 = this.layer4.forward(y3); // Feed-forward layer-4
+         var y = binarize(x4);             // Binarize operation on output of layer-4
          return y;
     }
     set(network){
